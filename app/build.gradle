@@ -26,8 +26,17 @@ android {
         mock {
             applicationIdSuffix = ".mock"
         }
-        prod {
+       prod {
 
+       }
+    }
+
+    // Remove mockRelease  and prodRelease as it's not needed.
+    android.variantFilter { variant ->
+        if((variant.buildType.name.equals('release')
+                && variant.getFlavors().get(0).name.equals('mock')) || (variant.buildType.name.equals('release')
+                && variant.getFlavors().get(0).name.equals('prod'))) {
+            variant.setIgnore(true);
         }
     }
 }
@@ -38,4 +47,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:recyclerview-v7:24.0.0'
     compile 'com.android.support:design:24.0.0'
+    compile 'com.android.support:recyclerview-v7:24.0.0'
+
+    compile "com.google.guava:guava:$rootProject.guavaVersion"
 }
