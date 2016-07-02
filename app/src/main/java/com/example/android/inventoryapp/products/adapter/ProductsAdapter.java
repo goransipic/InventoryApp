@@ -1,5 +1,6 @@
 package com.example.android.inventoryapp.products.adapter;
 
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +66,7 @@ public class ProductsAdapter extends BaseAdapter {
         final Product product = getItem(i);
 
         ImageView mProductImage = (ImageView) rowView.findViewById(R.id.product_image);
-
+        mProductImage.setImageBitmap(BitmapFactory.decodeByteArray(product.getImage(), 0, product.getImage().length));
 
         TextView productNameTV = (TextView) rowView.findViewById(R.id.product_name);
         TextView productQuantityTV = (TextView) rowView.findViewById(R.id.product_quantity);

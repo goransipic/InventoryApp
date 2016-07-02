@@ -23,7 +23,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/product_image">
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_toRightOf="@id/product_image"
+        android:layout_toEndOf="@id/product_image">
 
         <TextView
             android:id="@+id/product_name"
@@ -37,7 +40,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/product_name"
-            tools:text="12 items" />
+            tools:text="12" />
+
+        <TextView
+            android:id="@+id/product_quantity_items"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_name"
+            android:layout_toRightOf="@id/product_quantity"
+            android:layout_toEndOf="@id/product_quantity"
+            android:layout_marginLeft="@dimen/items_left_margin"
+            android:layout_marginStart="@dimen/items_left_margin"
+            android:text="@string/items" />
+
 
     </RelativeLayout>
 

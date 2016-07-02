@@ -13,7 +13,7 @@ public interface ProductsDataSource {
 
     interface LoadProductsCallback {
 
-        void onProdutcsLoaded(List<Product> products);
+        void onProductsLoaded(List<Product> products);
 
         void onDataNotAvailable();
     }
@@ -26,8 +26,12 @@ public interface ProductsDataSource {
 
     }
 
-    void getProdutcs(@NonNull LoadProductsCallback callback);
+    List<Product> getProdutcs();
 
     void getProduct(@NonNull String productId, @NonNull GetProductCallback callback);
+
+    void saveProduct(@NonNull Product product);
+
+    void updateProduct(Product product);
 
 }

@@ -5,14 +5,24 @@ package com.example.android.inventoryapp.products.model;
  */
 public class Product {
 
+    private byte[] mImage;
     private String mProduct;
     private String mQuantity;
-    private int mPrice;
+    private String mPrice;
 
-    public Product(String mProduct, String mQuantity, int mPrice) {
-        this.mProduct = mProduct;
-        this.mQuantity = mQuantity;
-        this.mPrice = mPrice;
+    public Product(String product, String quantity, String price, byte[] image) {
+        this.mProduct = product;
+        this.mQuantity = quantity;
+        this.mPrice = price;
+        this.mImage = image;
+    }
+
+    public byte[] getImage() {
+        return mImage;
+    }
+
+    public void setImage(byte[] image) {
+        this.mImage = image;
     }
 
     public String getProduct() {
@@ -31,11 +41,11 @@ public class Product {
         this.mQuantity = quantity;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return mPrice;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.mPrice = price;
     }
 }

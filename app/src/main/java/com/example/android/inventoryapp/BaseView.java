@@ -5,6 +5,6 @@ package com.example.android.inventoryapp;
  */
 public interface BaseView<T> {
 
-    void setPresenter(T presenter);
+
 
 }
