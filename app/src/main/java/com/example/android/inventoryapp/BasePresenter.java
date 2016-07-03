@@ -5,6 +5,4 @@ package com.example.android.inventoryapp;
  */
 public interface BasePresenter {
 
-    void start();
-
 }

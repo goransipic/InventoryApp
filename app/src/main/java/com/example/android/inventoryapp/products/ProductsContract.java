@@ -12,11 +12,9 @@ import com.example.android.inventoryapp.products.model.Product;
  */
 public interface ProductsContract {
 
-
     interface View extends BaseView<Presenter> {
 
         void addNewProduct();
-
 
     }
 
@@ -24,11 +22,10 @@ public interface ProductsContract {
 
         void loadProducts(@NonNull ProductsDataSource.LoadProductsCallback callback);
 
-        void openProductDetail(Product clickedProduct);
-
-        void onBuyButtonClicked(Product clickedProduct);
+        void onSellButtonClicked(Product clickedProduct);
 
         void addNewProduct(Product product);
-    }
 
+        boolean findByProductName(String productName);
+    }
 }

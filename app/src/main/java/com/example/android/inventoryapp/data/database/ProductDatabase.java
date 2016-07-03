@@ -20,6 +20,7 @@ public class ProductDatabase extends SQLiteOpenHelper {
     private static final String TYPE_TEXT = " TEXT";
     private static final String TYPE_BLOB = " BLOB";
     private static final String COMMA_SEP = ",";
+    private static final String TYPE_INT = " INTEGER";
 
     /**
      * SQL statement to create "HABIT TRACKER" table.
@@ -29,7 +30,7 @@ public class ProductDatabase extends SQLiteOpenHelper {
                     ProductContract.Products._ID + " INTEGER PRIMARY KEY," +
                     ProductContract.Products.COLUMN_IMAGE + TYPE_BLOB + COMMA_SEP +
                     ProductContract.Products.COLUMN_PRODUCT + TYPE_TEXT + COMMA_SEP +
-                    ProductContract.Products.COLUMN_QUANTITY + TYPE_TEXT + COMMA_SEP +
+                    ProductContract.Products.COLUMN_QUANTITY + TYPE_INT + COMMA_SEP +
                     ProductContract.Products.COLUMN_PRICE + TYPE_TEXT + ")";
     /**
      * SQL statement to drop "entry" table.

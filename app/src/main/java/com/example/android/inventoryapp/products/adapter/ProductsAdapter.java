@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.android.inventoryapp.R;
@@ -14,6 +15,7 @@ import com.example.android.inventoryapp.products.ProductsFragment;
 import com.example.android.inventoryapp.products.model.Product;
 
 import java.util.List;
+import java.util.Locale;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -65,6 +67,14 @@ public class ProductsAdapter extends BaseAdapter {
 
         final Product product = getItem(i);
 
+        RelativeLayout relativeLayout = (RelativeLayout) rowView.findViewById(R.id.list_item_product_row);
+
+        relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mItemListener.showDetailProducts(product);
+            }
+        });
         ImageView mProductImage = (ImageView) rowView.findViewById(R.id.product_image);
         mProductImage.setImageBitmap(BitmapFactory.decodeByteArray(product.getImage(), 0, product.getImage().length));
 
@@ -72,10 +82,10 @@ public class ProductsAdapter extends BaseAdapter {
         TextView productQuantityTV = (TextView) rowView.findViewById(R.id.product_quantity);
 
         productNameTV.setText(product.getProduct());
-        productQuantityTV.setText(product.getQuantity());
+        productQuantityTV.setText(String.format(Locale.US,"%d",product.getQuantity()));
 
         Button button = (Button) rowView.findViewById(R.id.product_button);
-        button.setText(product.getPrice());
+        button.setText(String.format(Locale.US,"+ %.2f $",product.getPrice()));
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override

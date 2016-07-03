@@ -3,10 +3,14 @@
     <string name="sale">12 USD</string>
     <string name="no_products_all">You have no Products!</string>
     <string name="no_tasks_add">Add a Product item +</string>
-    <string name="cancel">cancel</string>
+    <string name="cancel">Cancel</string>
     <string name="signin">Ok</string>
     <string name="product_name">Product name</string>
     <string name="add_new_product">New Product</string>
     <string name="price">+ %.2f $</string>
     <string name="items">items</string>
+    <string name="no_more_products">No more Products</string>
+    <string name="ok">Ok</string>
+    <string name="delete_message">"Do you want delete: "</string>
+    <string name="current_quantity">Current Quantity: </string>
 </resources>

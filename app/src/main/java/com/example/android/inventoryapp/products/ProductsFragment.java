@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -22,11 +23,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.android.inventoryapp.R;
 import com.example.android.inventoryapp.data.source.ProductsDataSource;
 import com.example.android.inventoryapp.data.source.ProductsRepository;
+import com.example.android.inventoryapp.detailproduct.DetailProductActivity;
 import com.example.android.inventoryapp.products.adapter.ProductsAdapter;
 import com.example.android.inventoryapp.products.model.Product;
 import com.example.android.inventoryapp.util.ImageUtils;
@@ -34,7 +35,6 @@ import com.example.android.inventoryapp.util.ImageUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by goransi on 1.7.2016..
@@ -43,16 +43,17 @@ public class ProductsFragment extends Fragment implements ProductsContract.View 
 
     public static final int REQUEST_CODE = 0;
     private static final String TAG = ProductsFragment.class.getSimpleName();
+    public static final String INTENT_EXTRA = "product";
     private ProductsContract.Presenter mPresenter;
 
     private ProductsAdapter mProductsAdapter;
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-    public static final int MEDIA_TYPE_IMAGE = 1;
     private Uri fileUri;
     private File mediaStorageDir;
     private AlertDialog.Builder builder;
     private TextInputLayout mTextInputLayout;
+    private FloatingActionButton mFab;
 
     public static ProductsFragment newInstance() {
         return new ProductsFragment();
@@ -76,10 +77,9 @@ public class ProductsFragment extends Fragment implements ProductsContract.View 
         listView.setAdapter(mProductsAdapter);
 
         // Set up floating action button
-        FloatingActionButton fab =
-                (FloatingActionButton) getActivity().findViewById(R.id.fab_add_task);
+        mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab_add_task);
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -104,7 +104,6 @@ public class ProductsFragment extends Fragment implements ProductsContract.View 
                 addNewProduct();
             }
         }
-
     }
 
     @Override
@@ -143,6 +142,11 @@ public class ProductsFragment extends Fragment implements ProductsContract.View 
             public void onClick(View view) {
                 if (!TextUtils.isEmpty(mTextInputLayout.getEditText().getText())) {
 
+                    if (mPresenter.findByProductName(mTextInputLayout.getEditText().getText().toString())) {
+                        mTextInputLayout.setError("Duplicate Product Name");
+                        mTextInputLayout.setErrorEnabled(true);
+                        return;
+                    }
                     // create Intent to take a picture and return control to the calling application
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -157,8 +161,6 @@ public class ProductsFragment extends Fragment implements ProductsContract.View 
 
                     mTextInputLayout.setError("Product name cannot be empty");
                     mTextInputLayout.setErrorEnabled(true);
-
-
                 }
             }
         });
@@ -173,8 +175,8 @@ public class ProductsFragment extends Fragment implements ProductsContract.View 
                 // Image captured and saved to fileUri specified in the Intent
 
                 String productTemp = mTextInputLayout.getEditText().getText().toString();
-                String quantityRandom = String.format(Locale.US, "%d", (int) (Math.random() * 10 + 1));
-                String priceRandom = String.format(Locale.US, this.getString(R.string.price), (Math.random() * 12) + 1);
+                int quantityRandom = (int) (Math.random() * 10 + 1);
+                double priceRandom = (Math.random() * 12) + 1;
 
                 Bitmap bitmapScaled = ImageUtils.decodeSampledBitmapFromFile(mediaStorageDir.getPath() + File.separator + "IMG" + ".jpg", 100);
                 byte[] bitArrayImage = ImageUtils.convertBitmapToByteArray(bitmapScaled);
@@ -247,17 +249,18 @@ public class ProductsFragment extends Fragment implements ProductsContract.View 
 
         void onProductClick(Product clickedProduct);
 
+        void showDetailProducts(Product clickedProduct);
     }
 
     ProductItemListener mProductItemListener = new ProductItemListener() {
         @Override
         public void onProductClick(Product clickedProduct) {
 
-            if (Integer.parseInt(clickedProduct.getQuantity()) == 0) {
-                Toast.makeText(ProductsFragment.this.getContext(), "No more Products", Toast.LENGTH_LONG).show();
-            }
-            else {
-                mPresenter.onBuyButtonClicked(clickedProduct);
+            if (clickedProduct.getQuantity() == 0) {
+                Snackbar.make(mFab, R.string.no_more_products, Snackbar.LENGTH_LONG).show();
+            } else {
+                clickedProduct.setQuantity(clickedProduct.getQuantity() - 1);
+                mPresenter.onSellButtonClicked(clickedProduct);
                 mPresenter.loadProducts(new ProductsDataSource.LoadProductsCallback() {
                     @Override
                     public void onProductsLoaded(List<Product> products) {
@@ -270,8 +273,14 @@ public class ProductsFragment extends Fragment implements ProductsContract.View 
                     }
                 });
             }
+        }
 
+        @Override
+        public void showDetailProducts(Product clickedProduct) {
+            Intent intent = new Intent(ProductsFragment.this.getContext(), DetailProductActivity.class);
+            intent.putExtra(INTENT_EXTRA, clickedProduct);
 
+            ProductsFragment.this.getContext().startActivity(intent);
         }
     };
 

@@ -25,7 +25,7 @@ public class ProductsRepository implements ProductsDataSource {
         SQLiteDatabase sqLiteDatabase = mProductDatabase.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ProductContract.Products.COLUMN_QUANTITY, Integer.parseInt(product.getQuantity()) - 1);
+        contentValues.put(ProductContract.Products.COLUMN_QUANTITY, product.getQuantity());
 
         sqLiteDatabase.update(ProductContract.Products.TABLE_NAME, contentValues, ProductContract.Products.COLUMN_PRODUCT + "=?", new String[]{product.getProduct()});
     }
@@ -61,12 +61,12 @@ public class ProductsRepository implements ProductsDataSource {
         ArrayList<Product> products = new ArrayList<>();
 
         while (cursor.moveToNext()) {
-            Product product = new Product(null, null, null, null);
+            Product product = new Product(null, 0, 0, null);
 
             byte[] imageTemp = cursor.getBlob(cursor.getColumnIndex(ProductContract.Products.COLUMN_IMAGE));
             String productTemp = cursor.getString(cursor.getColumnIndex(ProductContract.Products.COLUMN_PRODUCT));
-            String priceTemp = cursor.getString(cursor.getColumnIndex(ProductContract.Products.COLUMN_PRICE));
-            String quantityTemp = cursor.getString(cursor.getColumnIndex(ProductContract.Products.COLUMN_QUANTITY));
+            Double priceTemp = cursor.getDouble(cursor.getColumnIndex(ProductContract.Products.COLUMN_PRICE));
+            int quantityTemp = cursor.getInt(cursor.getColumnIndex(ProductContract.Products.COLUMN_QUANTITY));
 
             product.setImage(imageTemp);
             product.setProduct(productTemp);
@@ -84,7 +84,31 @@ public class ProductsRepository implements ProductsDataSource {
     }
 
     @Override
-    public void getProduct(@NonNull String productId, @NonNull GetProductCallback callback) {
+    public void deleteProduct(Product product) {
+        SQLiteDatabase sqLiteDatabase = mProductDatabase.getWritableDatabase();
 
+        sqLiteDatabase.delete(ProductContract.Products.TABLE_NAME,
+                ProductContract.Products.COLUMN_PRODUCT + "=?",
+                new String[]{product.getProduct()});
+    }
+
+    @Override
+    public boolean findByProductName(String product) {
+        SQLiteDatabase sqLiteDatabase = mProductDatabase.getReadableDatabase();
+
+        Cursor cursor= sqLiteDatabase.query(ProductContract.Products.TABLE_NAME,
+                new String[]{ProductContract.Products.COLUMN_PRODUCT},
+                ProductContract.Products.COLUMN_PRODUCT + "=?",
+                new String[]{product},
+                null,
+                null,
+                null);
+
+        if (cursor.moveToNext()){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

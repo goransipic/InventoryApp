@@ -28,10 +28,13 @@ public interface ProductsDataSource {
 
     List<Product> getProdutcs();
 
-    void getProduct(@NonNull String productId, @NonNull GetProductCallback callback);
+//    void getProduct(@NonNull String productId, @NonNull GetProductCallback callback);
 
     void saveProduct(@NonNull Product product);
 
     void updateProduct(Product product);
 
+    void deleteProduct(Product product);
+
+    boolean findByProductName(String product);
 }

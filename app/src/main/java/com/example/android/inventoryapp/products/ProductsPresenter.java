@@ -30,17 +30,12 @@ public class ProductsPresenter implements ProductsContract.Presenter {
     }
 
     @Override
-    public void start() {
-
-    }
-
-    @Override
-    public void openProductDetail(Product clickedProduct) {
-
-    }
-
-    @Override
-    public void onBuyButtonClicked(Product clickedProduct) {
+    public void onSellButtonClicked(Product clickedProduct) {
         mDataSource.updateProduct(clickedProduct);
+    }
+
+    @Override
+    public boolean findByProductName(String product) {
+       return mDataSource.findByProductName(product);
     }
 }
